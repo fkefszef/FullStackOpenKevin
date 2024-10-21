@@ -1,75 +1,27 @@
 import { useState } from 'react'
 
-const StatisticLine = (props) => {
-  return (
-    <tr>
-      <td>{props.text}</td>
-      <td>{props.value}</td>
-    </tr> 
-  )
-}
-
-const Statistics = (props) => {
-  if(props.allClicks == 0){
-    return (
-      <p>No feedback given</p>
-    )
-  }
-  return (
-    // <div>
-    //   <h1>Statistics</h1>
-    //   <p>good {props.good}</p>
-    //   <p>neutral {props.neutral}</p>
-    //   <p>bad {props.bad}</p>
-    //   <p>all {props.allClicks}</p>
-    //   <p>average {(props.good*1 + props.bad*-1)/props.allClicks}</p>
-    //   <p>positive {(props.good*100)/props.allClicks || 0}%</p>
-    // </div>
-      <table>
-      <tbody>
-        <StatisticLine text="good" value={props.good}></StatisticLine>
-        <StatisticLine text="neutral" value={props.neutral}></StatisticLine>
-        <StatisticLine text="bad" value={props.bad}></StatisticLine>
-        <StatisticLine text="all" value={props.allClicks}></StatisticLine>
-        <StatisticLine text="average" value={(props.good*1 + props.bad*-1)/props.allClicks}></StatisticLine>
-        <StatisticLine text="positive" value={(props.good*100)/props.allClicks + "%" || 0}></StatisticLine>
-      </tbody>
-      </table>
-  )
-}
-
 const App = () => {
-  const [good, setGood] = useState(0)
-  const [neutral, setNeutral] = useState(0)
-  const [bad, setBad] = useState(0)
-
-  const [allClicks, setAll] = useState(0)
-
-  const handleGood = () => {
-    setGood(good + 1)
-    setAll(allClicks + 1)
-  }
-
-  const handleNeutral = () => {
-    setNeutral(neutral + 1)
-    setAll(allClicks + 1)
-  }
-
-  const handleBad = () => {
-    setBad(bad + 1)
-    setAll(allClicks + 1)
+  const anecdotes = [
+    'If it hurts, do it more often.',
+    'Adding manpower to a late software project makes it later!',
+    'The first 90 percent of the code accounts for the first 90 percent of the development time...The remaining 10 percent of the code accounts for the other 90 percent of the development time.',
+    'Any fool can write code that a computer can understand. Good programmers write code that humans can understand.',
+    'Premature optimization is the root of all evil.',
+    'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.',
+    'Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when diagnosing patients.',
+    'The only way to go fast, is to go well.'
+  ]
+   
+  const [selected, setSelected] = useState(0)
+  
+  const anecdotesSelected = () => {
+    setSelected(Math.floor(Math.random() * anecdotes.length))
   }
 
   return (
     <div>
-      <h1>give feedback</h1>
-      <button onClick={handleGood}>good</button>
-      <button onClick={handleNeutral}>neutral</button>
-      <button onClick={handleBad}>bad</button>
-
-      <Statistics good={good} neutral={neutral} bad={bad} allClicks={allClicks}></Statistics>
-      
-      
+      {anecdotes[selected]}
+      <br></br><button onClick={anecdotesSelected}>next anecdote</button>
     </div>
   )
 }
