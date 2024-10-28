@@ -1,0 +1,15 @@
+1. Install node and hope it works fine right of the bat. If it doesn't, question your life choices and then go to step 2
+2. Open powershell and paste in:
+	Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
+2.1. Just agree by typing 'y'.
+3. Open Profile Environment Variables by just searching them up, edit Path and add new rule containing path to '(node folder)/node_modules/npm':
+	D:\nodejs\node_modules\npm
+Done!.. or should be..
+thats why! 
+3.1. Open up visual studio code, open new terminal, type in npm - if you get error then its fucked up :)
+sooo, typical way of solving shit is turning off and back on - try it, if it still throws error then bro better start looking for a different or ask ChatGPT but usualy it doesn't help.
+
+
+
+(git config --local user.name)
+(git config --local user.email)
