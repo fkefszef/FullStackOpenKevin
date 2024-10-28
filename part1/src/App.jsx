@@ -13,23 +13,14 @@ const App = () => {
   ]
    
   const [selected, setSelected] = useState(0)
-  const [points, setPoint] = useState({
-    0: 0, 
-    1: 0, 
-    2: 0, 
-    3: 0, 
-    4: 0,
-    5: 0,
-    6: 0,
-    7: 0
-  })
+  const [points, setPoint] = useState([0,0,0,0,0,0,0,0])
 
   const anecdotesSelected = () => {
     setSelected(Math.floor(Math.random() * anecdotes.length))
   }
 
   const anecdotesVotes = () => {
-    const newPoints = {...points}
+    const newPoints = [...points]
     newPoints[selected] += 1
     setPoint(newPoints)
   }
@@ -43,7 +34,8 @@ const App = () => {
       <br></br><button onClick={anecdotesSelected}>next anecdote</button>
       <button onClick={anecdotesVotes}>vote</button>
       <h1>Anectode with the most votes</h1>
-      {anecdotes[points.indexOf(Math.max(...points))]}
+      <p>{anecdotes[points.indexOf(Math.max(...points))]}</p>
+      <p>has {Math.max(...points)} votes</p>
     </div>
   )
 }
