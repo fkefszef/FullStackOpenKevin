@@ -20,4 +20,15 @@ const deletePerson = (id) => {
     });
 };
 
-export default { getPersons, addPerson, deletePerson };
+const updateNumber = (id, newNumber) => {
+  return axios.patch(`http://localhost:3001/persons/${id}`, {
+    number: newNumber
+  }).then(response => {
+    return response.data;
+  })
+  .catch(error => {
+    console.error('Error updating resource:', error);
+  });
+}
+
+export default { getPersons, addPerson, deletePerson, updateNumber };
