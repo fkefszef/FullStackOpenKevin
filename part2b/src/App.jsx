@@ -32,7 +32,6 @@ const App = () => {
 
     const newPerson = { name: newName, number: newNumber }
 
-    // Send the new person data to the server (post request)
     axios
       .post('http://localhost:3001/persons', newPerson)
       .then(response => {
