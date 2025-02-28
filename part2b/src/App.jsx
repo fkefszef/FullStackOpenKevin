@@ -40,6 +40,14 @@ const App = () => {
       });
   };
 
+  const deletePerson = (id) => {
+    if (window.confirm('Are you sure you want to delete this entry?')) {
+      BackEnd.deletePerson(id).then(() => {
+        setPersons(prevPersons => prevPersons.filter(person => person.id !== id));
+      });
+    }
+  };
+  
   const handleNameChange = (event) => {
     setNewName(event.target.value);
   };
@@ -69,7 +77,7 @@ const App = () => {
         handleNumberChange={handleNumberChange}
       />
       <h2>Numbers</h2>
-      <Show filtered={filtered} />
+      <Show filtered={filtered} deletePerson={deletePerson}/>
     </div>
   );
 };

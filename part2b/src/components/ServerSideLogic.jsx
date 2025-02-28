@@ -9,4 +9,15 @@ const addPerson = (newName, newNumber) => {
   return axios.post('http://localhost:3001/persons', newPerson).then(response => response.data);
 };
 
-export default { getPersons, addPerson };
+const deletePerson = (id) => {
+  return axios.delete(`http://localhost:3001/persons/${id}`)
+    .then(() => {
+      console.log(`Person with ID ${id} deleted successfully.`);
+    })
+    .catch(error => {
+      console.error('Error deleting person:', error);
+      alert('Failed to delete the person');
+    });
+};
+
+export default { getPersons, addPerson, deletePerson };
