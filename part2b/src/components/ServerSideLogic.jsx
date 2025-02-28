@@ -1,33 +1,12 @@
-import { useEffect } from "react"
-    useEffect(() => {
-        axios
-        .get('http://localhost:3001/persons')
-        .then(response => {
-            setPersons(response.data)
-        })
-        .catch(error => {
-            console.error('Error fetching data: ', error)
-        })
-    }, [])
+import axios from "axios";
 
-  const addName = (event) => {
-    event.preventDefault()
-    if (persons.some(person => person.name === newName)) {
-      alert(`${newName} is already added to phonebook`)
-      return
-    }
+const getPersons = () => {
+  return axios.get('http://localhost:3001/persons').then(response => response.data);
+};
 
-    const newPerson = { name: newName, number: newNumber }
+const addPerson = (newName, newNumber) => {
+  const newPerson = { name: newName, number: newNumber };
+  return axios.post('http://localhost:3001/persons', newPerson).then(response => response.data);
+};
 
-    axios
-      .post('http://localhost:3001/persons', newPerson)
-      .then(response => {
-        setPersons(persons.concat(response.data))
-        setNewName('')
-        setNewNumber('')
-      })
-      .catch(error => {
-        console.error('Error adding new person: ', error)
-      })
-  }
-export default BackEnd;
+export default { getPersons, addPerson };
