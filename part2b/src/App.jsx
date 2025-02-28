@@ -10,7 +10,6 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('');
   const [search, setSearch] = useState('');
 
-  // Fetch persons using BackEnd.getPersons()
   useEffect(() => {
     BackEnd.getPersons()
       .then(data => {
@@ -21,7 +20,6 @@ const App = () => {
       });
   }, []);
 
-  // Add a new name using BackEnd.addPerson()
   const addName = (event) => {
     event.preventDefault();
     if (persons.some(person => person.name === newName)) {
@@ -45,8 +43,7 @@ const App = () => {
     if (persons.some(person => person.name === newName)) {
       if(window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)){
         const person = persons.find(p => p.name === newName)
-        const updatedPerson = {...person, number: newNumber}
-        BackEnd.updateNumber(person.id, newNumber).then(() => {
+        BackEnd.updateNumber(person.id, newNumber).then((updated) => {
           setPersons(persons.map(p => p.id !== updated.id ? p : updated))
         })
       }
