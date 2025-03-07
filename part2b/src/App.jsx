@@ -48,6 +48,7 @@ const App = () => {
         const person = persons.find(p => p.name === newName)
         BackEnd.updateNumber(person.id, newNumber).then((updated) => {
           setPersons(persons.map(p => p.id !== updated.id ? p : updated))
+          setErrorMessage(`Number updated for ${person.name}`)
         })
       }
     }
@@ -55,11 +56,10 @@ const App = () => {
 
   const deletePerson = (id) => {
     if (window.confirm('Are you sure you want to delete this entry?')) {
+      const personToDelete = persons.find(person => person.id === id);
       BackEnd.deletePerson(id).then(() => {
         setPersons(prevPersons => prevPersons.filter(person => person.id !== id));
-        if(id == null){
-          setErrorMessage(`Information of ${person.name} has already been removed from server`);
-        }
+          setErrorMessage(`Information of ${personToDelete.name} has already been removed from server`);
       });
     }
   };
@@ -85,7 +85,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={errorMessage}/>
+      <Notification errorMessage={errorMessage}/>
       <Search search={search} handleSearchChange={handleSearchChange} />
       <h2>add a new</h2>
       <Person
