@@ -3,12 +3,14 @@ import Search from './components/Filter';
 import Person from './components/Person';
 import Show from './components/Show';
 import BackEnd from './components/ServerSideLogic';
+import Notification from './components/Notification';
 
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('');
   const [search, setSearch] = useState('');
+  const [errorMessage, setErrorMessage] = useState(null);
 
   useEffect(() => {
     BackEnd.getPersons()
@@ -33,6 +35,7 @@ const App = () => {
         setPersons(persons.concat(data));
         setNewName('');
         setNewNumber('');
+        setErrorMessage(`Added ${newName}`);
       })
       .catch(error => {
         console.error('Error adding new person: ', error);
@@ -54,6 +57,9 @@ const App = () => {
     if (window.confirm('Are you sure you want to delete this entry?')) {
       BackEnd.deletePerson(id).then(() => {
         setPersons(prevPersons => prevPersons.filter(person => person.id !== id));
+        if(id == null){
+          setErrorMessage(`Information of ${person.name} has already been removed from server`);
+        }
       });
     }
   };
@@ -70,6 +76,8 @@ const App = () => {
     setSearch(event.target.value);
   };
 
+
+
   const filtered = persons.filter(person =>
     person.name.toLowerCase().includes(search.toLowerCase())
   );
@@ -77,6 +85,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={errorMessage}/>
       <Search search={search} handleSearchChange={handleSearchChange} />
       <h2>add a new</h2>
       <Person
