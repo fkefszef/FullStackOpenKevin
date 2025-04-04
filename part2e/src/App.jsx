@@ -3,12 +3,15 @@ import axios from 'axios';
 
 const App = () => {
   const [countryName, setCountryName] = useState('');
-  const [countries, setCountries] = useState([]); 
+  const [countries, setCountries] = useState([]);
   const [errorMessage, setErrorMessage] = useState('');
   const [selectedCountry, setSelectedCountry] = useState(null);
+  const [weather, setWeather] = useState(null);
+
+  const weatherApiKey = '';
 
   const handleChange = (event) => {
-    setCountryName(event.target.value); 
+    setCountryName(event.target.value);
   };
 
   const handleSearch = () => {
@@ -45,6 +48,22 @@ const App = () => {
     setCountries([]);
   };
 
+  useEffect(() => {
+    if (selectedCountry && selectedCountry.capital && selectedCountry.capital[0]) {
+      const capital = selectedCountry.capital[0];
+      
+      axios
+        .get(`https://api.openweathermap.org/data/2.5/weather?q=${capital}&appid=${weatherApiKey}`)
+        .then((response) => {
+          setWeather(response.data);
+        })
+        .catch((error) => {
+          setWeather(null);
+          setErrorMessage('Could not fetch weather data.');
+        });
+    }
+  }, [selectedCountry]);
+
   return (
     <div>
       <h1>Country Information</h1>
@@ -55,7 +74,6 @@ const App = () => {
         placeholder="Search for a country"
       />
       <button onClick={handleSearch}>Search</button>
-
       {errorMessage && <p>{errorMessage}</p>}
       {selectedCountry && (
         <div>
@@ -64,6 +82,15 @@ const App = () => {
           <p><strong>Area:</strong> {selectedCountry.area} km²</p>
           <p><strong>Languages:</strong> {Object.values(selectedCountry.languages).join(', ')}</p>
           <span style={{ fontSize: '100px' }}>{selectedCountry.flag}</span>
+
+          {selectedCountry.capital && selectedCountry.capital[0] && weather ? (
+            <div>
+              <p><strong>Temperature:</strong> {weather.main.temp}°C</p>
+              <p><strong>Wind:</strong> {weather.wind.speed} m/s</p>
+            </div>
+          ) : (
+            <p>Weather data not available</p>
+          )}
         </div>
       )}
 
