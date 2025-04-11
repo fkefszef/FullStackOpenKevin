@@ -82,10 +82,13 @@ const App = () => {
           <p><strong>Area:</strong> {selectedCountry.area} km²</p>
           <p><strong>Languages:</strong> {Object.values(selectedCountry.languages).join(', ')}</p>
           <span style={{ fontSize: '100px' }}>{selectedCountry.flag}</span>
-
           {selectedCountry.capital && selectedCountry.capital[0] && weather ? (
             <div>
-              <p><strong>Temperature:</strong> {weather.main.temp}°C</p>
+              <p><strong>Temperature:</strong> {weather.main.temp}°F</p>
+              <img
+                  src={`http://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`}
+                  alt={weather.weather[0].description}
+                />
               <p><strong>Wind:</strong> {weather.wind.speed} m/s</p>
             </div>
           ) : (
