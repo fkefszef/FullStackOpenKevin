@@ -1,7 +1,7 @@
 const express = require('express')
 const app = express()
 
-phonebookData = [
+const phonebookData = [
     { 
       "id": "1",
       "name": "Arto Hellas", 
@@ -32,7 +32,7 @@ app.get('/info', (request, response) => {
     response.send(
     `<div>
       <p>Phonebook has info for ${phonebookData.length} people</p>
-      <p>${new Date()}
+      <p>${new Date()}</p>
     </div>`
     )
 })
@@ -45,6 +45,18 @@ app.get('/api/persons/:id', (request, response) => {
   }else{
     response.status(404).json({error: 'Person not found' })
   }
+})
+
+// Corrected DELETE route
+app.delete('/api/persons/:id', (request, response) => {
+  const id = request.params.id;
+  const index = phonebookData.find(p => p.id === id);
+  if(index !== -1){
+    phonebookData.splice(index, 1);
+    response.status(204).end();
+  }else{
+    response.status(404).json({error: 'Person not found' })
+  }``
 })
 
 const PORT = 3001;
