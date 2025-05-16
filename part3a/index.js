@@ -1,6 +1,8 @@
 const express = require('express')
 const app = express()
 
+app.use(express.json())
+
 const phonebookData = [
     { 
       "id": "1",
@@ -47,7 +49,7 @@ app.get('/api/persons/:id', (request, response) => {
   }
 })
 
-// Corrected DELETE route
+// Corrected DELETE 
 app.delete('/api/persons/:id', (request, response) => {
   const id = request.params.id;
   const index = phonebookData.find(p => p.id === id);
@@ -56,10 +58,18 @@ app.delete('/api/persons/:id', (request, response) => {
     response.status(204).end();
   }else{
     response.status(404).json({error: 'Person not found' })
-  }``
+  }
 })
 
 const PORT = 3001;
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
 });
+
+app.post('/api/persons', (request, response) => {
+  const person = request.body;
+  const randomId = (Math.random() * 10000).toFixed(0);
+  const newPerson = {id: randomId, ...person};
+  phonebookData.push(newPerson);
+  response.status(201).json(newPerson);
+})
