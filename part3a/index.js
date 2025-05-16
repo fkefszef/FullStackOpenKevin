@@ -69,6 +69,12 @@ app.listen(PORT, () => {
 app.post('/api/persons', (request, response) => {
   const person = request.body;
   const randomId = (Math.random() * 10000).toFixed(0);
+  const index = phonebookData.find(p => p.id === randomId);
+  const name = phonebookData.find(p => p.name === person.name);
+  const number = phonebookData.find(p => p.number === person.number);
+  if(index){return response.status(400).json({ error: 'id must be unique' });}
+  if(name){return response.status(400).json({ error: 'name must be unique' });}
+  if(number){return response.status(400).json({ error: 'number must be unique' });}
   const newPerson = {id: randomId, ...person};
   phonebookData.push(newPerson);
   response.status(201).json(newPerson);
