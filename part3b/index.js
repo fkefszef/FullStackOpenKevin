@@ -3,7 +3,6 @@ import http from 'http'
 import morgan from 'morgan'
 import cors from 'cors'
 
-const cors = require('cors')
 const app = express()
 app.use(cors())
 app.use(express.json())
