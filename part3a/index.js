@@ -1,12 +1,12 @@
-import express from 'express'
-import http from 'http'
-import morgan from 'morgan'
-import cors from 'cors'
-
+const http = require('http')
+const express = require('express')
 const cors = require('cors')
+var morgan = require('morgan')
 const app = express()
+
 app.use(cors())
 app.use(express.json())
+app.use(express.static(`dist`))
 
 morgan.token('body', (req) => {
   if (req.method === 'POST') {
