@@ -10,7 +10,7 @@ app.use(express.static(`dist`))
 
 //MONGO DATABASE SECTION
 const mongoose = require('mongoose')
-const password = `3LwkrV6AF5isrr2W`;
+const password = `wSyjUs8qZ2J4ijgV`;
 const url = `mongodb+srv://vqev22:${password}@cluster0.xerewno.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`
 
 mongoose.set('strictQuery',false)
@@ -56,7 +56,7 @@ app.get('/api/persons/:id', (request, response) => {
   Phonebook.findById(request.params.id)
     .then(person => {
       if(person){
-        res.json(person)
+        response.json(person)
       }else{
         response.status(404).json({error: 'Person not found' })
       }
@@ -69,22 +69,53 @@ app.listen(PORT, () => {
 });
 
 app.post('/api/persons', (request, response) => {
-  const { name, number } = request.body
+  const { name, number } = request.body;
 
   if (!name || !number) {
-    return response.status(400).json({ error: 'Name and number are required' })
+    return response.status(400).json({ error: 'Name and number are required' });
   }
 
   Phonebook.findOne({ name })
     .then(existingPerson => {
       if (existingPerson) {
-        return response.status(400).json({ error: 'Name must be unique' })
+        return response.status(400).json({ error: 'Name already exists, use PUT to update the number' });
+      } else {
+        const person = new Phonebook({ name, number });
+        return person.save()
+          .then(savedPerson => {
+            response.status(201).json(savedPerson);
+          });
       }
+    })
+    .catch(error => {
+      response.status(500).json({ error: error.message });
+    });
+});
 
-      const person = new Phonebook({ name, number })
-      person.save()
-        .then(savedPerson => {
-          response.status(201).json(savedPerson)
-        })
+app.delete('/api/persons/:id', (request, response) => {
+  Phonebook.findByIdAndDelete(request.params.id)
+    .then(result => {
+      if(result){
+        response.status(204).end();
+      }else{
+        response.status(404).json({ error: 'Person not found' });
+      }
     })
 })
+
+app.put('/api/persons/:id', (req, res) => {
+  const { number } = req.body;
+  Phonebook.findByIdAndUpdate(
+    req.params.id,
+    { number },
+    { new: true, runValidators: true, context: 'query' }
+  )
+  .then(updatedPerson => {
+    if(updatedPerson) {
+      res.json(updatedPerson);
+    } else {
+      res.status(404).json({ error: 'Person not found' });
+    }
+  })
+  .catch(error => res.status(400).json({ error: error.message }));
+});
